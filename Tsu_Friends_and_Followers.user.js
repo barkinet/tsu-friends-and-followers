@@ -403,7 +403,7 @@ $( document ).ready(function () {
 
     doLog( 'Start Observer.' );
     // Check if we can use the MutationObserver.
-    if ( false &&  'MutationObserver' in window ) {
+    if ( 'MutationObserver' in window ) {
       var toObserve = document.querySelector( queryToObserve );
       if ( toObserve ) {
         var observer = new MutationObserver( function( mutations ) {
