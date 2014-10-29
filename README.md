@@ -28,6 +28,7 @@ Script can be found here:
 - https://github.com/noplanman/tsu-friends-and-followers/raw/master/Tsu_Friends_and_Followers.user.js
 - https://greasyfork.org/en/scripts/6108-tsu-friends-and-followers
 - https://openuserjs.org/scripts/noplanman/Tsu_Friends_and_Followers
+- https://monkeyguts.com/code.php?id=559
 
 How does it work?
 =================
