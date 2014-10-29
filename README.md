@@ -1,12 +1,11 @@
 tsu-friends-and-followers
 =========================
+Author: Armando Lüscher
 
-Author:  Armando Lüscher
 Version: 1.0
 
 Details
 =======
-
 Tsu script to display Friends and Followers of all users on the current page.
 
 Use this script to display the number of Friends and Followers a user has, right next to / under their user name.
@@ -20,15 +19,15 @@ A link "Load Friends and Followers" gets added to the menu at the top right, to 
 
 Installation
 ============
-Firefox: Install the GreaseMonkey plugin and add the script to the library.
-Chrome: Install the Tampermonkey plugin and add the script to the library.
+- Firefox: Install the GreaseMonkey plugin and add the script to the library.
+- Chrome: Install the Tampermonkey plugin and add the script to the library.
 
 Alernatively, you can just minify the script and create a bookmark in your browser's toolbar to execute the code on the current page. This will have to be done every time the page is reloaded.
 
 Script can be found here:
-https://github.com/noplanman/tsu-friends-and-followers/raw/master/Tsu_Friends_and_Followers.user.js
-https://greasyfork.org/en/scripts/6108-tsu-friends-and-followers
-https://openuserjs.org/scripts/noplanman/Tsu_Friends_and_Followers
+- https://github.com/noplanman/tsu-friends-and-followers/raw/master/Tsu_Friends_and_Followers.user.js
+- https://greasyfork.org/en/scripts/6108-tsu-friends-and-followers
+- https://openuserjs.org/scripts/noplanman/Tsu_Friends_and_Followers
 
 How does it work?
 =================
