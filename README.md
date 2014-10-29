@@ -25,6 +25,10 @@ Chrome: Install the Tampermonkey plugin and add the script to the library.
 
 Alernatively, you can just minify the script and create a bookmark in your browser's toolbar to execute the code on the current page. This will have to be done every time the page is reloaded.
 
+Script can be found here:
+https://github.com/noplanman/tsu-friends-and-followers/raw/master/Tsu_Friends_and_Followers.user.js
+https://greasyfork.org/en/scripts/6108-tsu-friends-and-followers
+https://openuserjs.org/scripts/noplanman/Tsu_Friends_and_Followers
 
 How does it work?
 =================
@@ -32,6 +36,12 @@ Basically what happens, is that the script searches the page for user links and 
 The details get saved and are reused when the same user name appears multiple times. This makes sure that each user is only loaded once, to save precious time and bandwidth. Using the menu button to freshly load Friends and Followers, clears the saved entries and reloads them all, as you might have guessed.
 
 I will try to keep this script up to date and am very much looking forward to an official API from Tsu to make things quicker and more reliable.
+
+
+Any Ideas / Feature requests / comments?
+========================================
+If you have any ideas for me or things you would like to see in this script, just create an "Issue" on the right and let me know!
+Any comment is highly appreciated, thanks!
 
 
 Tested with
