@@ -1,10 +1,10 @@
-// ==UserScript==
+﻿// ==UserScript==
 // @name        Tsu Friends and Followers
 // @namespace   tsu-friends-and-followers
 // @description Tsu script to display Friends and Followers of all users on the current page
 // @include     http://*tsu.co*
 // @include     https://*tsu.co*
-// @version     1.0
+// @version     1.1
 // @author      Armando Lüscher
 // @grant       none
 // ==/UserScript==
@@ -14,6 +14,8 @@
  * Automatically loads new data for newly appearing user links.
  *
  * waitForKeyElements is used in case the current browser does not support the MutationObserver.
+ *
+ * For changelog see https://github.com/noplanman/tsu-friends-and-followers/blob/master/CHANGELOG.md
  */
 
 $( document ).ready(function () {
@@ -31,10 +33,15 @@ $( document ).ready(function () {
   var userObjects = [];
 
   // Max number of tries to get friend and follower info.
-  var maxTries = 30;
+  var maxTries = 60;
 
   // Add all the sub nav items.
   addSubNavItems();
+
+  var localVersion = 1.1;
+  // Check for remote version number.
+  checkRemoteVersion();
+
 
   // Get the current page and start the observer to automatically update user links.
   setTimeout( function() {
@@ -61,17 +68,27 @@ $( document ).ready(function () {
       currentPage    = 'home';
       queryToLoad    = '.evac_user';
       queryToObserve = 'body.newsfeed';
-    } else if ( document.URL.endsWith( 'discover' ) ) {
+    } else if ( $( 'body.discover' ).length ) {
       currentPage    = 'discover';
-      queryToLoad    = '#discover .tree_child_fullname';
+      queryToLoad    = 'body.discover .tree_child_fullname';
       // No observer necessary!
       // TODO: Also, with observer, this page goes crazy...
       queryToObserve = '';
-    } else if( $( '#profile_feed' ).length ) {
+    } else if ( $( '#profile_feed' ).length ) {
       // Diary
       currentPage    = 'diary';
       queryToLoad    = '.evac_user';
       queryToObserve = '#profile_feed';
+    } else if ( $( 'body.tree' ).length ) {
+      // Family tree.
+      currentPage    = 'tree';
+      queryToLoad    = 'body.tree .tree_child_fullname';
+      queryToObserve = '.tree_page';
+    } else if ( document.URL.contains( '/post/' ) ) {
+      // Single post.
+      currentPage    = 'post';
+      queryToLoad    = '.evac_user';
+      queryToObserve = '.post';
     } else if ( document.URL.endsWith( '/friends' ) ) {
       // Friends.
       currentPage    = 'friends';
@@ -104,20 +121,23 @@ $( document ).ready(function () {
    * @param {boolean} clean Delete saved details and refetch all.
    */
   function loadFriendsAndFollowers( clean ) {
-    if ( clean && confirm( 'Reload all Friend and Follower details of all users on the current page?' ) ) {
-      doLog( '- (clean) Start loading Friends and Followers.' );
+    if ( clean ) {
+      if ( confirm( 'Reload all Friend and Follower details of all users on the current page?' ) ) {
+        doLog( '- (clean) Start loading Friends and Followers.' );
 
-      // Reset lists.
-      userObjectsBusyLoading = [];
-      userObjects = [];
+        // Reset lists.
+        userObjectsBusyLoading = [];
+        userObjects = [];
 
-      // Remove all existing user links spans and brs.
-      $( '.tff-span, .tff-br' ).remove();
-      $( '.tff-processed' ).removeClass( 'tff-processed' );
+        // Remove all existing user links spans and brs.
+        $( '.tff-span, .tff-br' ).remove();
+        $( '.tff-processed' ).removeClass( 'tff-processed' );
+      } else {
+        return;
+      }
     } else {
       doLog( '- Start loading Friends and Followers.' );
     }
-
 
     // Special case for "Discover Users".
     if ( 'discover' == currentPage ) {
@@ -161,7 +181,7 @@ $( document ).ready(function () {
       }
 
       // If no link has been found, continue with the next one. Fail-safe.
-      if ( 0 == $currentUserLink.length ) {
+      if ( 0 === $currentUserLink.length ) {
         return;
       }
 
@@ -174,7 +194,7 @@ $( document ).ready(function () {
       var $userLinkSpan = $( '<span/>', { html: '<img class="tff-loader-wheel" src="/assets/loader.gif" title="Loading..." />', 'class': 'tff-span' } );
       $currentUserLink.after( $userLinkSpan );
 
-      // Special case for these profile pages, to make it look nicer and fitting.
+      // Special case for these pages, to make it look nicer and fitting.
       if ( 'friends' == currentPage || 'followers' == currentPage || 'following' == currentPage || 'discover' == currentPage ) {
         $userLinkSpan.before( '<br class="tff-br" />' );
       }
@@ -183,6 +203,7 @@ $( document ).ready(function () {
       var userName = $currentUserLink.text().trim();
       var userUrl  = $currentUserLink.attr( 'href' );
 
+      // Special case for the Discover page to get the userID.
       if ( 'discover' == currentPage ) {
         userID = userUrl.split( '/' )[2];
       } else {
@@ -203,7 +224,7 @@ $( document ).ready(function () {
         return;
       }
 
-
+      // Load the numbers from the user profile page.
       $( '<span/>' ).load( userUrl + ' .profile_details .numbers', function( response, status ) {
         if ( 'success' == status ) {
           var $numbers = $( 'a', this );
@@ -233,6 +254,7 @@ $( document ).ready(function () {
           $currentUserLink.addClass( 'tff-processed' );
 
         } else if ( 'error' == status ) {
+          doLog( response, 'e' );
           $(this).html( 'n/a' );
         }
 
@@ -254,7 +276,7 @@ $( document ).ready(function () {
       }, 2000 );
     }
     busyLoading = true;
-  }
+  };
 
 
   /**
@@ -283,12 +305,12 @@ $( document ).ready(function () {
     // Return a clone of the Friends page link.
     this.getFriendsLink = function() {
       return this.$friendsLink.clone();
-    }
+    };
 
     // Return a clone of the Followers page link.
     this.getFollowersLink = function() {
       return this.$followersLink.clone();
-    }
+    };
   }
 
   /**
@@ -374,7 +396,7 @@ $( document ).ready(function () {
       // Just remove the failed link span, maybe it will work on the next run.
       $userLinkSpan.remove();
 
-      doLog( '(id:' + userID + ') Maximum tries exeeded!');
+      doLog( '(id:' + userID + ') Maximum tries exeeded!', 'w' );
       return;
     }
 
@@ -401,7 +423,7 @@ $( document ).ready(function () {
       return;
     }
 
-    doLog( 'Start Observer.' );
+    doLog( 'Start Observer.', 'i' );
     // Check if we can use the MutationObserver.
     if ( 'MutationObserver' in window ) {
       var toObserve = document.querySelector( queryToObserve );
@@ -463,6 +485,12 @@ $( document ).ready(function () {
         .user_card_1_wrapper .tree_child_fullname {\
           height: 32px !important;\
         }\
+        .tff-update-link {\
+          background-color: #F1B054 !important;\
+          margin-top: 15px !important;\
+          height: 24px !important;\
+          box-sizing: border-box !important;\
+        }\
       ')
       .appendTo( 'head' );
   }
@@ -474,7 +502,7 @@ $( document ).ready(function () {
     doLog( 'Loading Sub Nav Items...' );
 
     // Load Friends and Followers
-    if ( 0 == $( '#tff-menuitem-load-friends-and-followers' ).length ) {
+    if ( 0 === $( '#tff-menuitem-load-friends-and-followers' ).length ) {
       var $loadFriendsAndFollowersAnchor = $( '<a/>', { html: 'Load Friends and Followers' } );
       $loadFriendsAndFollowersAnchor.click( function() { loadFriendsAndFollowers( true ); } );
 
@@ -490,15 +518,47 @@ $( document ).ready(function () {
 
   /**
    * Make a log entry if debug mode is active.
-   * @param  {string} logMessage Message to write to the log console.
+   * @param {string}  logMessage Message to write to the log console.
+   * @param {string}  level      Level to log ([l]og,[i]nfo,[w]arning,[e]rror).
+   * @param {boolean} alsoAlert  Also echo the message in an alert box.
    */
-  function doLog( logMessage, alsoAlert ) {
+  function doLog( logMessage, level, alsoAlert ) {
     if ( debug ) {
-      console.log( logMessage );
+      switch( level ) {
+        case 'i': console.info( logMessage );  break;
+        case 'w': console.warn( logMessage );  break;
+        case 'e': console.error( logMessage ); break;
+        default: console.log( logMessage );
+      }
       if ( alsoAlert ) {
         alert( logMessage );
       }
     }
+  }
+
+  /**
+   * Get the remote version on GitHub and output a message if a newer version is found.
+   */
+  function checkRemoteVersion() {
+    $.get( 'https://cdn.rawgit.com/noplanman/tsu-friends-and-followers/master/VERSION', function ( remoteVersion ) {
+      doLog( 'Versions: Local (' + localVersion + '), Remote (' + remoteVersion + ')', 'i' );
+      if ( parseFloat( remoteVersion ) > localVersion ) {
+        var $updateLink = $( '<a/>', {
+          title: 'Update Friends and Followers script to the newest version (' + remoteVersion + ')',
+          href: 'https://greasyfork.org/scripts/6108-tsu-friends-and-followers/code/Tsu%20Friends%20and%20Followers.user.js',
+          html: 'Update!'
+        })
+        .addClass( 'button tff-update-link' )
+        .attr( 'target', '_blank' ) // Open in new window / tab.
+        .insertAfter( '.tab.name' ) // Add link to title bar next to name.
+        .click(function() {
+          if ( ! confirm( 'Upgrade to the newest version?\n\n(refresh this page after the script has been updated)' ) ) {
+            return false;
+          }
+        });
+      }
+    })
+    .fail(function() { doLog( 'Couldn\'t get remote version number.', 'w' ); });
   }
 
   /***************

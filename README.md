@@ -2,7 +2,9 @@
 
 Author: Armando Lüscher
 
-Version: 1.0
+Version: 1.1 ([changelog](https://github.com/noplanman/tsu-friends-and-followers/blob/master/CHANGELOG.md))
+
+Short Link for sharing: https://j.mp/tsu-friends-and-followers
 
 ##Details
 
@@ -21,10 +23,12 @@ A link "Load Friends and Followers" gets added to the menu at the top right, to 
 
 ###With Plugin (recommended)
 
-- Firefox: Install the [GreaseMonkey](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/) plugin and add the script to the library.
-- Chrome: Install the [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?hl=en) plugin and add the script to the library.
+1. Which browser?
+- Firefox: Install the [GreaseMonkey](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/) plugin.
+- Chrome: Install the [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?hl=en) plugin.
+- Safari (untested): Install the [NinjaKit](http://www.pimpmysafari.com/items/NinjaKit-GreaseKit-for-Safari/) extension.
 
-Script can be found here:
+2. Friends and Followers script can be found here (just choose any one)
 - https://github.com/noplanman/tsu-friends-and-followers/raw/master/Tsu_Friends_and_Followers.user.js
 - https://greasyfork.org/en/scripts/6108-tsu-friends-and-followers
 - https://openuserjs.org/scripts/noplanman/Tsu_Friends_and_Followers
@@ -32,14 +36,14 @@ Script can be found here:
 
 ###With Bookmarklet (to give it a try)
 
-Alernatively, you can just create a [bookmarklet](https://en.wikipedia.org/wiki/Bookmarklet) in your browser's bookmarks toolbar to execute the script on the current Tsu page you're on.
+Alternatively, you can just create a [bookmarklet](https://en.wikipedia.org/wiki/Bookmarklet) in your browser's bookmarks toolbar to execute the script on the current Tsu page you're on.
 
 1. Right click you bookmarks toolbar and choose "New Bookmark" or open your bookmarks panel and choose "New Bookmark".
 2. Give it a name (e.g. Display Tsu Friends and Followers) and in the location / destination field add the whole line you can find [here](https://github.com/noplanman/tsu-friends-and-followers/raw/master/Tsu_Friends_and_Followers_Bookmarklet.txt).
 3. Visit Tsu and click on the newly created bookmarklet.
 4. Mind blown!
 
-*Note: With this method, you will have to click the bookmark / run the bookmarklet every time the page is reloaded. Therefor, the plugin variant is highly recommended.*
+*Note: With this method, you will have to click the bookmark / run the bookmarklet every time the page is reloaded. Therefore, the plugin variant is highly recommended.*
 
 
 ##How does it work?
@@ -50,7 +54,7 @@ The details get saved and are reused when the same user name appears multiple ti
 I will try to keep this script up to date and am very much looking forward to an official API from Tsu to make things quicker and more reliable.
 
 
-##Any Ideas / Feature requests / comments?
+##Any Ideas / Feature requests / Comments?
 
 If you have any ideas for me or things you would like to see in this script, just create a [New Issue](https://github.com/noplanman/tsu-friends-and-followers/issues/new) and let me know!
 Any comment is highly appreciated, thanks!
