@@ -24,15 +24,14 @@ A link "Load Friends and Followers" gets added to the menu at the top right, to 
 ###With Plugin (recommended)
 
 1. Which browser?
-- Firefox: Install the [GreaseMonkey](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/) plugin.
-- Chrome: Install the [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?hl=en) plugin.
-- Safari (untested): Install the [NinjaKit](http://www.pimpmysafari.com/items/NinjaKit-GreaseKit-for-Safari/) extension.
+  - Firefox: Install the [GreaseMonkey](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/) plugin.
+  - Chrome: Install the [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?hl=en) plugin.
+  - Safari (untested): Install the [NinjaKit](http://www.pimpmysafari.com/items/NinjaKit-GreaseKit-for-Safari/) extension.
 
 2. Friends and Followers script can be found here (just choose any one)
-- https://github.com/noplanman/tsu-friends-and-followers/raw/master/Tsu_Friends_and_Followers.user.js
-- https://greasyfork.org/en/scripts/6108-tsu-friends-and-followers
-- https://openuserjs.org/scripts/noplanman/Tsu_Friends_and_Followers
-- https://monkeyguts.com/code.php?id=559
+  - https://github.com/noplanman/tsu-friends-and-followers/raw/master/Tsu_Friends_and_Followers.user.js
+  - https://greasyfork.org/en/scripts/6108-tsu-friends-and-followers
+  - https://openuserjs.org/scripts/noplanman/Tsu_Friends_and_Followers
 
 ###With Bookmarklet (to give it a try)
 
