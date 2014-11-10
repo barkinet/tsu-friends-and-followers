@@ -1,5 +1,10 @@
 #Change Log
 
+##Version 1.2
+
+- Updated updater to be more integrated into UI (user menu).
+- Updater now using GitHub API to check version.
+
 ##Version 1.1
 
 - Add functionality to single posts.
@@ -9,4 +14,4 @@
 
 ##Version 1.0
 
-Initial script that adds Friends and Followers count next to user links.
+- Initial script that adds Friends and Followers count next to user links.

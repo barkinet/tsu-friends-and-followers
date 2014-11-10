@@ -4,7 +4,7 @@
 // @description Tsu script to display Friends and Followers of all users on the current page
 // @include     http://*tsu.co*
 // @include     https://*tsu.co*
-// @version     1.1
+// @version     1.2
 // @author      Armando Lüscher
 // @grant       none
 // ==/UserScript==
@@ -19,6 +19,44 @@
  */
 
 $( document ).ready(function () {
+
+  /***************
+  HELPER FUNCTIONS
+  ***************/
+
+  /**
+   * Base64 library, just decoder: http://www.webtoolkit.info/javascript-base64.html
+   * @param {string} e Base64 string to decode.
+   */
+  function base64_decode(e){var t="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";var n="";var r,i,s;var o,u,a,f;var l=0;e=e.replace(/[^A-Za-z0-9\+\/\=]/g,"");while(l<e.length){o=t.indexOf(e.charAt(l++));u=t.indexOf(e.charAt(l++));a=t.indexOf(e.charAt(l++));f=t.indexOf(e.charAt(l++));r=o<<2|u>>4;i=(u&15)<<4|a>>2;s=(a&3)<<6|f;n=n+String.fromCharCode(r);if(a!=64){n=n+String.fromCharCode(i)}if(f!=64){n=n+String.fromCharCode(s)}}return n}
+
+  /**
+   * Check if a string starts with a certain string.
+   */
+  if ( 'function' !== typeof String.prototype.startsWith ) {
+    String.prototype.startsWith = function( str ) {
+      return ( this.slice( 0, str.length ) == str );
+    };
+  }
+
+  /**
+   * Check if a string ends with a certain string.
+   */
+  if ( 'function' !== typeof String.prototype.endsWith ) {
+    String.prototype.endsWith = function( str ) {
+      return ( this.slice( -str.length ) == str );
+    };
+  }
+
+  /**
+   * Check if a string contains a certain string.
+   */
+  if ( 'function' !== typeof String.prototype.contains ) {
+    String.prototype.contains = function( str ) {
+      return ( this.indexOf( str ) >= 0 );
+    };
+  }
+
 
   // Add the required CSS rules.
   addCSS();
@@ -38,7 +76,11 @@ $( document ).ready(function () {
   // Add all the sub nav items.
   addSubNavItems();
 
-  var localVersion = 1.1;
+  // URL where to get the newest script.
+  var scriptURL = 'https://greasyfork.org/scripts/6108-tsu-friends-and-followers/code/Tsu%20Friends%20and%20Followers.user.js';
+
+  var localVersion = 1.2;
+  var getVersionAPIURL = 'https://api.github.com/repos/noplanman/tsu-friends-and-followers/contents/VERSION';
   // Check for remote version number.
   checkRemoteVersion();
 
@@ -485,11 +527,8 @@ $( document ).ready(function () {
         .user_card_1_wrapper .tree_child_fullname {\
           height: 32px !important;\
         }\
-        .tff-update-link {\
-          background-color: #F1B054 !important;\
-          margin-top: 15px !important;\
-          height: 24px !important;\
-          box-sizing: border-box !important;\
+        #tff-menuitem-update a:before {\
+          display: none !important;\
         }\
       ')
       .appendTo( 'head' );
@@ -537,59 +576,40 @@ $( document ).ready(function () {
   }
 
   /**
-   * Get the remote version on GitHub and output a message if a newer version is found.
+   * Get the remote version on GitHub and add a menuitem and notification if a newer version is found.
    */
   function checkRemoteVersion() {
-    $.get( 'https://cdn.rawgit.com/noplanman/tsu-friends-and-followers/master/VERSION', function ( remoteVersion ) {
+    $.getJSON( getVersionAPIURL, function ( response ) {
+      var remoteVersion = parseFloat( base64_decode( response.content ) );
       doLog( 'Versions: Local (' + localVersion + '), Remote (' + remoteVersion + ')', 'i' );
-      if ( parseFloat( remoteVersion ) > localVersion ) {
-        var $updateLink = $( '<a/>', {
-          title: 'Update Friends and Followers script to the newest version (' + remoteVersion + ')',
-          href: 'https://greasyfork.org/scripts/6108-tsu-friends-and-followers/code/Tsu%20Friends%20and%20Followers.user.js',
-          html: 'Update!'
-        })
-        .addClass( 'button tff-update-link' )
-        .attr( 'target', '_blank' ) // Open in new window / tab.
-        .insertAfter( '.tab.name' ) // Add link to title bar next to name.
-        .click(function() {
-          if ( ! confirm( 'Upgrade to the newest version?\n\n(refresh this page after the script has been updated)' ) ) {
-            return false;
-          }
-        });
+
+      // Check if there is a newer version available.
+      if ( remoteVersion > localVersion ) {
+        // Change the background color of the name tab on the top right.
+        $( '#navBarHead .tab.name' ).css( 'background-color', '#F1B054' );
+
+        // Make sure the update link doesn't already exist!
+        if ( 0 === $( '#tff-menuitem-update' ).length ) {
+          var $updateLink = $( '<a/>', {
+            title: 'Update Friends and Followers script to the newest version (' + remoteVersion + ')',
+            href: scriptURL,
+            html: 'Update Tsu F&F!'
+          })
+          .attr( 'target', '_blank' ) // Open in new window / tab.
+          .css( { 'background-color' : '#F1B054', 'color' : '#fff' } ) // White text on orange background.
+          .click(function() {
+            if ( ! confirm( 'Upgrade to the newest version (' + remoteVersion + ')?\n\n(refresh this page after the script has been updated)' ) ) {
+              return false;
+            }
+          });
+
+          $( '<li/>', { 'id': 'tff-menuitem-update', html: $updateLink } )
+          .appendTo( '#navBarHead .sub_nav' );
+        }
+
       }
     })
-    .fail(function() { doLog( 'Couldn\'t get remote version number.', 'w' ); });
-  }
-
-  /***************
-  HELPER FUNCTIONS
-  ***************/
-
-  /**
-   * Check if a string starts with a certain string.
-   */
-  if ( 'function' !== typeof String.prototype.startsWith ) {
-    String.prototype.startsWith = function( str ) {
-      return ( this.slice( 0, str.length ) == str );
-    };
-  }
-
-  /**
-   * Check if a string ends with a certain string.
-   */
-  if ( 'function' !== typeof String.prototype.endsWith ) {
-    String.prototype.endsWith = function( str ) {
-      return ( this.slice( -str.length ) == str );
-    };
-  }
-
-  /**
-   * Check if a string contains a certain string.
-   */
-  if ( 'function' !== typeof String.prototype.contains ) {
-    String.prototype.contains = function( str ) {
-      return ( this.indexOf( str ) >= 0 );
-    };
+    .fail(function() { doLog( 'Couldn\'t get remote version number for TFF.', 'w' ); });
   }
 
 })();

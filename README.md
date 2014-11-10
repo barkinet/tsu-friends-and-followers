@@ -2,7 +2,7 @@
 
 Author: Armando Lüscher
 
-Version: 1.1 ([changelog](https://github.com/noplanman/tsu-friends-and-followers/blob/master/CHANGELOG.md))
+Version: 1.2 ([changelog](https://github.com/noplanman/tsu-friends-and-followers/blob/master/CHANGELOG.md))
 
 Short Link for sharing: https://j.mp/tsu-friends-and-followers
 
@@ -18,6 +18,7 @@ The details get loaded automatically when the page gets loaded and automatically
 
 A link "Load Friends and Followers" gets added to the menu at the top right, to force a reload of all Friends and Followers. This is useful if you just want to update / re-fetch the up-to-date details without having to reload the page.
 
+When a new update is available, the username link on the top right will get an orange background and a new menu item will appear allowing you to update easily.
 
 ##Installation
 
